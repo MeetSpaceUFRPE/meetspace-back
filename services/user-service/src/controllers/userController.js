@@ -34,6 +34,19 @@ const getUserById = async (req, reply) => {
     }
 };
 
+const getUserByEmail = async (req, reply) => {
+    const { email } = req.params;
+    try {
+        const user = await User.findOne({ where: { email } });
+        if (!user) return reply.status(404).send({ error: 'Usuário não encontrado' });
+
+        return reply.send(user);
+    } catch (error) {
+        req.log.error(error);
+        return reply.status(404).send({ error: 'Usuário não encontrado' });
+    }
+};
+
 const updateUser = async (req, reply) => {
     const { id } = req.params;
     const { name, department } = req.body;
@@ -71,6 +84,7 @@ module.exports = {
     createUser,
     getUsers,
     getUserById,
+    getUserByEmail,
     updateUser,
     deleteUser,
 };
