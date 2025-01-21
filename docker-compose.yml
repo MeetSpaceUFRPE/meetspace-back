@@ -13,6 +13,19 @@ services:
     networks:
       - mynetwork
   
+  auth-service:
+    container_name: auth-service
+    build: ./services/auth-service
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./services/auth-service/.env
+    depends_on:
+      - db
+      - user-service
+    networks:
+      - mynetwork
+
   user-service:
     container_name: user-service
     build: ./services/user-service
