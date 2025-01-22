@@ -13,6 +13,17 @@ services:
     networks:
       - mynetwork
   
+  api-gateway:
+    container_name: api-gateway
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - user-service
+    networks:
+      - mynetwork
+
   auth-service:
     container_name: auth-service
     build: ./services/auth-service
