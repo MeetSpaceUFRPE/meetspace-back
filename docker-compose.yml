@@ -21,6 +21,7 @@ services:
     depends_on:
       - auth-service
       - user-service
+      - availability-service
     networks:
       - mynetwork
 
@@ -44,6 +45,18 @@ services:
       - "3002:3002"
     env_file:
       - ./services/user-service/.env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  availability-service:
+    container_name: availability-service
+    build: ./services/availability-service
+    ports:
+      - "3006:3006"
+    env_file:
+      - ./services/availability-service/.env
     depends_on:
       - db
     networks:

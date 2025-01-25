@@ -8,6 +8,7 @@ CORS(app)
 # URL dos serviços de destino
 AUTH_SERVICE_URL = 'http://auth-service:3001'
 USER_SERVICE_URL = 'http://user-service:3002'
+AVAILABILITY_SERVICE_URL = 'http://availability-service:3006'
 
 """
     Redireciona a requisição para o serviço de destino
@@ -41,6 +42,10 @@ def users_proxy(path):
 @app.route('/api/auth/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def auth_proxy(path):
     return proxy_request(AUTH_SERVICE_URL, path)
+
+@app.route('/api/salas/<id>/disponibilidade/<turno>', methods=['GET'])
+def availability_proxy(id, turno):
+    return proxy_request(AVAILABILITY_SERVICE_URL, f"salas/{id}/disponibilidade/{turno}")
 
 @app.route('/', methods=['GET'])
 def index():
