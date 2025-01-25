@@ -1,17 +1,19 @@
-import mongoose from "mongoose";
+import { Sequelize } from "sequelize";
 
-// Função para conectar ao banco de dados MongoDB
+const sequelize = new Sequelize(process.env.POSTGRES_DB, process.env.POSTGRES_USER, process.env.POSTGRES_PASSWORD, {
+  host: process.env.POSTGRES_HOST || "localhost",
+  dialect: "postgres",
+  logging: false, // Desabilita logs SQL (opcional)
+});
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("Conexão com o MongoDB realizada com sucesso.");
-  } catch (erro) {
-    console.error("Erro ao conectar ao MongoDB:", erro.message);
+    await sequelize.authenticate();
+    console.log("Conexão com o PostgreSQL realizada com sucesso.");
+  } catch (error) {
+    console.error("Erro ao conectar ao PostgreSQL:", error.message);
     process.exit(1); // Finaliza o processo em caso de erro
   }
 };
 
-export default connectDB;
+export { sequelize, connectDB };

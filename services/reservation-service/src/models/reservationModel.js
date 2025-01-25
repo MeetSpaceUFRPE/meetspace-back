@@ -1,34 +1,30 @@
-import mongoose from "mongoose";
+import { DataTypes } from "sequelize";
+import { sequelize } from "../config/dbConfig.js";
 
-const { Schema, model } = mongoose;
-
-const reservationSchema = new Schema(
+const Reservation = sequelize.define(
+  "Reservation",
   {
     turno: {
-      type: String,
-      enum: ["manha", "tarde", "noite"],
-      required: true,
+      type: DataTypes.ENUM("manha", "tarde", "noite"),
+      allowNull: false,
     },
     usuarioId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Usuario",
-      required: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     data: {
-      type: Date,
-      required: true,
+      type: DataTypes.DATEONLY,
+      allowNull: false,
     },
     salaId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Sala",
-      required: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
   {
-    timestamps: true, // Campos createdAt e updatedAt automáticos
+    tableName: "reservas",
+    timestamps: true, // Cria createdAt e updatedAt
   }
 );
-
-const Reservation = model("Reservation", reservationSchema);
 
 export default Reservation;
