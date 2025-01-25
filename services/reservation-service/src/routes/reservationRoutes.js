@@ -4,9 +4,9 @@ import { createReservation, getReservations } from "../controllers/reservationCo
 const router = express.Router();
 
 // Rota para criar uma nova reserva
-router.post("/", createReservation);
+router.post("/create", createReservation);
 
 // Rota para obter todas as reservas
-router.get("/", getReservations);
+router.get("/get", getReservations);
 
 export default router;
