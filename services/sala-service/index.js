@@ -7,7 +7,7 @@ import salaRoutes from './src/routes/salaRoutes.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3004;
+const PORT = process.env.SALA_SERVICE_PORT || 3004;
 
 app.use(cors());
 app.use(express.json());
@@ -24,7 +24,7 @@ sequelize.authenticate()
   });
 
 // Rotas
-app.use('/api/salas', salaRoutes);
+app.use(salaRoutes);
 
 // Iniciar servidor
 app.listen(PORT, () => console.log(`Serviço de Salas rodando na porta ${PORT}`));
