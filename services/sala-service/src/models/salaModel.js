@@ -1,29 +1,30 @@
-import mongoose from 'mongoose';
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/dbConfig.js';
 
-const { Schema, model } = mongoose;
-
-const salaSchema = new Schema({
+const Sala = sequelize.define('Sala', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   nome: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   capacidade: {
-    type: Number,
-    required: true,
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   localizacao: {
-    type: String,
-    required: true,
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   recursos: {
-    type: [String],
-    required: true,
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: true,
   },
 }, {
-  timestamps: true, // Adiciona createdAt e updatedAt automaticamente
-  collection: 'salas' // Define explicitamente o nome da coleção como 'salas'
+  timestamps: true,
+  tableName: 'salas',
 });
-
-const Sala = model('Sala', salaSchema);
-
 export default Sala;

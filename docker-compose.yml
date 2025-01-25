@@ -21,6 +21,7 @@ services:
     depends_on:
       - auth-service
       - user-service
+      - sala-service
     networks:
       - mynetwork
 
@@ -44,6 +45,19 @@ services:
       - "3002:3002"
     env_file:
       - ./services/user-service/.env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  # Serviço de Salas (Sala Service)
+  sala-service:
+    container_name: sala-service
+    build: ./services/sala-service  # Caminho para o diretório onde seu serviço sala-service está localizado
+    ports:
+      - "3004:3004"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres  # URL de conexão com o banco de dados
     depends_on:
       - db
     networks:
