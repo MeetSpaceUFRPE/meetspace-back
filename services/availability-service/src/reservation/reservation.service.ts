@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Reservation } from './models/reservation.model';
 import { Room } from './models/room.model';
@@ -8,9 +8,9 @@ import { Op } from 'sequelize';
 export class ReservationService {
   constructor(
     @InjectModel(Reservation)
-    private readonly reservationModel: typeof Reservation, // Injeta o modelo Reservation
+    private readonly reservationModel: typeof Reservation, 
     @InjectModel(Room)
-    private readonly roomModel: typeof Room, // Injeta o modelo Room
+    private readonly roomModel: typeof Room, 
   ) {}
 
   // Método para verificar se um turno está ocupado
@@ -23,7 +23,7 @@ export class ReservationService {
     });
 
     if (!sala) {
-      throw new Error('Sala não existe.');
+      throw new HttpException('Sala não existe.', HttpStatus.NOT_FOUND);
     }
 
     // Busca a reserva para a sala e turno específicos

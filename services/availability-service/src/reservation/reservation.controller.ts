@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, HttpStatus } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
+import { HttpException } from '@nestjs/common';
 
 @Controller('salas')
 export class ReservationController {
@@ -11,8 +12,15 @@ export class ReservationController {
         @Param('id') id: string,
         @Param('turno') turno: 'manha' | 'tarde' | 'noite',
     ): Promise<{ available: boolean }> {
-        const available = await this.reservationService.isAvailable(id, turno);
-        return { available };
+        try {
+            const available = await this.reservationService.isAvailable(id, turno);
+            return { available };
+        } catch (error){
+            throw new HttpException(
+                'Erro ao verificar a disponibilidade da sala',
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        }
     }
 
 }
