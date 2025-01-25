@@ -16,8 +16,14 @@ export class ReservationController {
             const available = await this.reservationService.isAvailable(id, turno);
             return { available };
         } catch (error){
+            // Verifica se o erro veio do service
+            if (error instanceof HttpException) {
+                throw new HttpException(error.message, error.getStatus());
+            }
+
+            // Caso contrário, lança um erro genérico
             throw new HttpException(
-                'Erro ao verificar a disponibilidade da sala',
+                'Erro ao verificar a disponibilidade da sala.',
                 HttpStatus.INTERNAL_SERVER_ERROR,
             );
         }
