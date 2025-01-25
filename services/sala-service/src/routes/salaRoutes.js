@@ -4,15 +4,15 @@ import { createSala, getSalas, updateSala, deleteSala } from '../controllers/sal
 const router = express.Router();
 
 // Criar uma sala
-router.post('/', createSala);
+router.post('/create', createSala);
 
 // Listar salas
-router.get('/', getSalas);
+router.get('/get', getSalas);
 
 // Atualizar uma sala
-router.put('/:salaId', updateSala);
+router.put('/update/:salaId', updateSala);
 
 // Deletar uma sala
-router.delete('/:salaId', deleteSala);
+router.delete('/delete/:salaId', deleteSala);
 
 export default router;

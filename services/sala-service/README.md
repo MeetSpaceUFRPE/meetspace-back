@@ -1,4 +1,13 @@
-Aqui está o **README.md** com a estrutura corrigida e mais organizada:
+## Variáveis de Ambiente
+
+```bash
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres 
+POSTGRES_PASSWORD=postgres
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+SALA_SERVICE_PORT=3004
+```
 
 ```markdown
 # Serviço de Salas - Reserva de Salas
