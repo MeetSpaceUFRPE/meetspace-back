@@ -45,7 +45,7 @@ def users_proxy(path):
 def auth_proxy(path):
     return proxy_request(AUTH_SERVICE_URL, path)
 
-@app.route('/api/salas/<id>/disponibilidade/<turno>', methods=['GET'])
+@app.route('/api/disponivel/<id>/<turno>', methods=['GET'])
 def availability_proxy(id, turno):
     return proxy_request(AVAILABILITY_SERVICE_URL, f"salas/{id}/disponibilidade/{turno}")
 

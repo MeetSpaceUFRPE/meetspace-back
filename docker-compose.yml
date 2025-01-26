@@ -58,7 +58,11 @@ services:
       - "3006:3006"
     env_file:
       - ./services/availability-service/.env
-      
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
   reservation-service:
     container_name: reservation-service
     build: ./services/reservation-service
