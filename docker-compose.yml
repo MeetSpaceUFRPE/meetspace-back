@@ -22,6 +22,7 @@ services:
       - auth-service
       - user-service
       - availability-service
+      - notification-service
       - sala-service
     networks:
       - mynetwork
@@ -57,7 +58,7 @@ services:
     ports:
       - "3005:3005"
     env_file:
-      - ./services/notification-service/.env
+      - ./.env
     depends_on:
       - db
     networks:
