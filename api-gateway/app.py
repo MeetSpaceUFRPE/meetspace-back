@@ -8,14 +8,17 @@ CORS(app)
 # URL dos serviços de destino
 AUTH_SERVICE_URL = 'http://auth-service:3001'
 USER_SERVICE_URL = 'http://user-service:3002'
-AVAILABILITY_SERVICE_URL = 'http://availability-service:3006'
 RESERVATION_SERVICE_URL = 'http://reservation-service:3003'
 SALA_SERVICE_URL = 'http://sala-service:3004'
+NOTIFICATION_SERVICE_URL = 'http://notification-service:3005'
+AVAILABILITY_SERVICE_URL = 'http://availability-service:3006'
 
 """
     Redireciona a requisição para o serviço de destino
 """
 def proxy_request(service_url, path):
+    print(f"{service_url}/{path}")
+
     # Faz a requisição para o serviço de destino
     resp = requests.request(
         method=request.method,
@@ -48,6 +51,10 @@ def auth_proxy(path):
 @app.route('/api/disponivel/<id>/<turno>/<data>', methods=['GET'])
 def availability_proxy(id, turno, data):
     return proxy_request(AVAILABILITY_SERVICE_URL, f"salas/{id}/disponibilidade/{turno}/{data}")
+
+@app.route('/api/notificacao/<path:path>', methods=['POST'])
+def notification_proxy(path):
+    return proxy_request(NOTIFICATION_SERVICE_URL, path)
 
 @app.route('/api/reservations/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def reservations_proxy(path):

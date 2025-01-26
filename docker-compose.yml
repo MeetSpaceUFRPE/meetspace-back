@@ -51,6 +51,18 @@ services:
     networks:
       - mynetwork
 
+  notification-service:
+    container_name: notification-service
+    build: ./services/notification-service
+    ports:
+      - "3005:3005"
+    env_file:
+      - ./services/notification-service/.env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+      
   availability-service:
     container_name: availability-service
     build: ./services/availability-service
@@ -62,6 +74,7 @@ services:
       - db
     networks:
       - mynetwork
+
 
   reservation-service:
     container_name: reservation-service
