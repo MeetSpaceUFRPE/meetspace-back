@@ -8,6 +8,7 @@ CORS(app)
 # URL dos serviços de destino
 AUTH_SERVICE_URL = 'http://auth-service:3001'
 USER_SERVICE_URL = 'http://user-service:3002'
+AVAILABILITY_SERVICE_URL = 'http://availability-service:3006'
 RESERVATION_SERVICE_URL = 'http://reservation-service:3003'
 SALA_SERVICE_URL = 'http://sala-service:3004'
 
@@ -43,6 +44,10 @@ def users_proxy(path):
 @app.route('/api/auth/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def auth_proxy(path):
     return proxy_request(AUTH_SERVICE_URL, path)
+
+@app.route('/api/disponivel/<id>/<turno>/<data>', methods=['GET'])
+def availability_proxy(id, turno, data):
+    return proxy_request(AVAILABILITY_SERVICE_URL, f"salas/{id}/disponibilidade/{turno}/{data}")
 
 @app.route('/api/reservations/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def reservations_proxy(path):
