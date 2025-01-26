@@ -18,7 +18,16 @@ export const createReservation = async (req, res) => {
     // O id do usuário é obtido do token JWT que foi validado pelo middleware de autenticação
     const usuarioId = req.user.id;
     const newReservation = await Reservation.create({ turno, usuarioId, data, salaId });
+
+    await fetch(`http://notification-service:3005/confirmacao/${usuarioId}/${newReservation.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+
     res.status(201).json(newReservation);
+
   } catch (error) {
     res.status(500).json({ error: "Erro ao criar reserva: " + error.message });
   }
