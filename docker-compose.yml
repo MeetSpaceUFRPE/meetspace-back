@@ -32,7 +32,7 @@ services:
     ports:
       - "3001:3001"
     env_file:
-      - ./services/auth-service/.env
+      - ./.env
     depends_on:
       - db
       - user-service
@@ -45,7 +45,7 @@ services:
     ports:
       - "3002:3002"
     env_file:
-      - ./services/user-service/.env
+      - ./.env
     depends_on:
       - db
     networks:
@@ -57,7 +57,7 @@ services:
     ports:
       - "3006:3006"
     env_file:
-      - ./services/availability-service/.env
+      - ./.env
     depends_on:
       - db
     networks:
@@ -71,7 +71,7 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
     env_file:
-      - ./services/reservation-service/.env
+      - ./.env
     depends_on:
       - db
     networks:
@@ -86,7 +86,7 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres  # URL de conexão com o banco de dados
     env_file:
-      - ./services/sala-service/.env
+      - ./.env
     depends_on:
       - db
     networks:
