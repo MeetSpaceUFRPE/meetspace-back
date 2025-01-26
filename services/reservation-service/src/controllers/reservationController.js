@@ -1,4 +1,7 @@
 import Reservation from "../models/reservationModel.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const createReservation = async (req, res) => {
   try {
@@ -11,6 +14,7 @@ export const createReservation = async (req, res) => {
 
     // Chama o serviço de disponibilidade para verificar se a sala está disponível
     const disponibilidade = await (await fetch(`${process.env.AVAILABILITY_SERVICE_URL}/salas/${salaId}/disponibilidade/${turno}/${data}`)).json();
+    
     if (!disponibilidade.available) {
       return res.status(400).json({ error: "Sala não está disponível" });
     }
@@ -18,8 +22,9 @@ export const createReservation = async (req, res) => {
     // O id do usuário é obtido do token JWT que foi validado pelo middleware de autenticação
     const usuarioId = req.user.id;
     const newReservation = await Reservation.create({ turno, usuarioId, data, salaId });
-
-    await fetch(`http://notification-service:3005/confirmacao/${usuarioId}/${newReservation.id}`, {
+    
+    // Envia e-mail de confirmação
+    await fetch(`${process.env.NOTIFICATION_SERVICE_URL}/confirmacao/${usuarioId}/${newReservation.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
