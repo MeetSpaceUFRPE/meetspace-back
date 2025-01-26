@@ -216,3 +216,16 @@ GET /api/reservations/get
 Retorna a lista de todas as reservas de salas.
 
 ---
+
+#### Lista reservas de usuário
+
+```http
+GET /api/reservations/user
+```
+
+> [!NOTE]
+> Esta rota é protegida por um middleware de autenticação. O cliente deve fornecer um token válido no cabeçalho Authorization para acessar este endpoint.
+
+Retorna a lista de todas as reservas de salas do usuário autenticado.
+
+---

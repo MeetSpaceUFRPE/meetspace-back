@@ -32,3 +32,13 @@ export const getReservations = async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar reservas: " + error.message });
   }
 };
+
+export const getUserReservations = async (req, res) => {
+  try {
+    const usuarioId = req.user.id;
+    const reservations = await Reservation.findAll({ where: { usuarioId } });
+    res.status(200).json(reservations);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao buscar reservas: " + error.message });
+  }
+};
