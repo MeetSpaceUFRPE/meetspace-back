@@ -1,5 +1,5 @@
 <p align="center">
-<img width=350 src="https://raw.githubusercontent.com/brenno-araujo25/reserva-salas-front/9d39de08c68ba96e4153a21c8b259b95ab74cb95/src/assets/meet_space_logo_black.svg">
+<img width=350 style="filter: invert(100%);" src="https://raw.githubusercontent.com/brenno-araujo25/reserva-salas-front/9d39de08c68ba96e4153a21c8b259b95ab74cb95/src/assets/meet_space_logo_black.svg">
 </p>
 
 <div align="center">
@@ -24,18 +24,16 @@ O MeetSpace é um sistema distribuído de gestão de reservas de salas de reuni�
 
 - [Funcionalidades](#funcionalidades)
 - [Microserviços](#microserviços)
-- [Variáveis de Ambiente](#variáveis-de-ambiente)
+- [Variáveis de ambiente](#variáveis-de-ambiente)
 - [Rodando localmente](#rodando-localmente)
-- [Documentação da API](#documentação-da-api)
+- [Documentação do API Gateway](#documentação-do-api-gateway)
     - [Endpoints](#endpoints)
         - [Registra usuário](#registra-usuário)
         - [Realiza login](#realiza-login)
-        - [Cria usuário](#cria-usuário)
-        - [Lista usuários](#lista-usuários)
-        - [Consulta usuário por ID](#consulta-usuário-por-id)
-        - [Consulta usuário por Email](#consulta-usuário-por-email)
-        - [Atualiza dados do usuário](#atualiza-dados-do-usuário)
-        - [Deleta usuário](#deleta-usuário)
+        - [Cria sala](#cria-sala)
+        - [Lista salas](#lista-salas)
+        - [Reserva uma sala](#reserva-uma-sala)
+        - [Lista todas as reservas](#lista-todas-as-reservas)
 
 ## Funcionalidades
 
@@ -84,25 +82,30 @@ Funcionalidade: Relatório mensal de uso de salas.
 Registra todas as ações e eventos no sistema para auditoria e monitoramento.
 Gera logs de quem fez reservas ou cancelamentos.
 
-## Variáveis de Ambiente
+## Variáveis de ambiente
 
-Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
+Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env na raiz do projeto:
+```bash
+# JWT config
+JWT_SECRET=jwt_secret_aqui
+JWT_EXPIRES_IN=1d
 
-Em auth-service:
-```
-JWT_SECRET=seu_secret_aqui
-JWT_EXPIRATION=1d
-USER_SERVICE_URL=http://user-service:3002
-```
-
-Em user-service:
-```
+# Postgres config
 POSTGRES_DB=postgres
 POSTGRES_USER=postgres 
 POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
+
+# Ports
 USER_SERVICE_PORT=3002
+SALA_SERVICE_PORT=3004
+RESERVATION_SERVICE_PORT=3003
+
+# Services URLs
+USER_SERVICE_URL=http://user-service:3002
+SALA_SERVICE_URL=http://sala-service:3004
+AVAILABILITY_SERVICE_URL=http://availability-service:3006
 ```
 
 ## Rodando localmente
@@ -125,7 +128,7 @@ Inicie os contêineres
   docker-compose up --build
 ```
 
-# Documentação da API
+# Documentação do API Gateway
 
 ## Endpoints
 
@@ -155,90 +158,74 @@ Inicie os contêineres
 | `email`      | `string` | **Obrigatório**. Email do usuário |
 | `password`      | `string` | **Obrigatório**. Senha do usuário |
 
+Retorna o token de acesso
+
 ---
 
-#### Cria usuário
+#### Cria sala
 
 ```http
-POST /api/users/users
+POST /api/salas/create
 ```
+
+> [!NOTE]
+> Esta rota é protegida por um middleware de autenticação. O cliente deve fornecer um token válido no cabeçalho Authorization para acessar este endpoint.
 
 | Body    | Tipo       | Descrição                           |
 | :----------- | :--------- | :---------------------------------- |
-| `name`       | `string`   | **Obrigatório**. Nome do usuário    |
-| `email`      | `string`   | **Obrigatório**. Email do usuário   |
-| `password`   | `string`   | **Obrigatório**. Senha do usuário   |
-| `department` | `string`   | **Obrigatório**. Departamento do usuário |
+| `nome`       | `string`   | **Obrigatório**. Nome identificador da sala    |
+| `capacidade`      | `int`   | **Obrigatório**. Capacidade máxima da sala   |
+| `localizacao`   | `string`   | **Obrigatório**. Andar que a sala pertence   |
+| `recursos` | `string[]`   | Lista de recursos, como projetor |
 
 ---
 
-#### Lista usuários
+#### Lista salas
 
 ```http
-GET /api/users/users
+GET /api/salas/get
 ```
 
-Retorna a lista de todos os usuários cadastrados.
+Retorna a lista de todos as salas cadastradas.
 
 ---
 
-#### Consulta usuário por ID
+#### Reserva uma sala
 
 ```http
-GET /api/users/users/:id
+GET /api/reservations/create
 ```
 
-| Parâmetro | Tipo     | Descrição                       |
+> [!NOTE]
+> Esta rota é protegida por um middleware de autenticação. O cliente deve fornecer um token válido no cabeçalho Authorization para acessar este endpoint.
+
+| Body | Tipo     | Descrição                       |
 | :-------- | :------- | :------------------------------ |
-| `id`      | `string` | **Obrigatório**. ID do usuário  |
-
-Retorna os dados do usuário correspondente ao `id`.
-
----
-
-#### Consulta usuário por Email
-
-```http
-GET /api/users/users/email/:email
-```
-
-| Parâmetro | Tipo     | Descrição                        |
-| :-------- | :------- | :------------------------------- |
-| `email`   | `string` | **Obrigatório**. Email do usuário |
-
-Retorna os dados do usuário correspondente ao `email`.
+| `salaId`      | `int` | **Obrigatório**. ID da sala  |
+| `turno`      | `string` | **Obrigatório**. Turno da reserva (manha, tarde ou noite)  |
+| `data`      | `string` | **Obrigatório**. Data da reserva (YYYY-MM-DD)  |
 
 ---
 
-#### Atualiza dados do usuário
+#### Lista todas as reservas
 
 ```http
-PUT /api/users/users/:id
+GET /api/reservations/get
 ```
 
-| Parâmetro | Tipo     | Descrição                       |
-| :-------- | :------- | :------------------------------ |
-| `id`      | `string` | **Obrigatório**. ID do usuário  |
-
-| Body        | Tipo       | Descrição                           |
-| :---------- | :--------- | :---------------------------------- |
-| `name`      | `string`   | **Opcional**. Nome do usuário       |
-| `email`     | `string`   | **Opcional**. Email do usuário      |
-| `password`  | `string`   | **Opcional**. Senha do usuário      |
-| `department`| `string`   | **Opcional**. Departamento do usuário |
-
-Atualiza os dados do usuário correspondente ao `id`.
+Retorna a lista de todas as reservas de salas.
 
 ---
 
-#### Deleta usuário
+#### Lista reservas de usuário
 
 ```http
-DELETE /api/users/users/:id
+GET /api/reservations/user
 ```
 
-| Parâmetro | Tipo     | Descrição                       |
-| :-------- | :------- | :------------------------------ |
-| `id`      | `string` | **Obrigatório**. ID do usuário  |
+> [!NOTE]
+> Esta rota é protegida por um middleware de autenticação. O cliente deve fornecer um token válido no cabeçalho Authorization para acessar este endpoint.
 
-Remove o usuário correspondente ao `id`.
+Retorna a lista de todas as reservas de salas do usuário autenticado.
+
+---
