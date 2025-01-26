@@ -56,3 +56,30 @@ export const getUserReservations = async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar reservas: " + error.message });
   }
 };
+
+export const cancelReservation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuarioId = req.user.id;
+    const reservation = await Reservation.findOne({ where: { id, usuarioId } });
+
+    if (!reservation) {
+      return res.status(404).json({ error: "Reserva não encontrada" });
+    }
+
+    // Envia e-mail de cancelamento
+    const notification = await fetch(`${process.env.NOTIFICATION_SERVICE_URL}/cancelamento/${usuarioId}/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+
+    // Deleta a reserva
+    await Reservation.destroy({ where: { id } });
+
+    res.status(200).json({ message: "Reserva cancelada com sucesso" });
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao cancelar reserva: " + error.message });
+  }
+};
