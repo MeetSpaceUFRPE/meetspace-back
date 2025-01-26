@@ -1,0 +1,10 @@
+## Variáveis de Ambiente
+
+```bash
+POSTGRES_DB=postgres
+POSTGRES_USER=postgres 
+POSTGRES_PASSWORD=postgres
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+USER_SERVICE_PORT=3002
+```

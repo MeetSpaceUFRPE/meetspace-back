@@ -22,6 +22,7 @@ services:
       - auth-service
       - user-service
       - availability-service
+      - sala-service
     networks:
       - mynetwork
 
@@ -57,6 +58,31 @@ services:
       - "3006:3006"
     env_file:
       - ./services/availability-service/.env
+      
+  reservation-service:
+    container_name: reservation-service
+    build: ./services/reservation-service
+    ports:
+      - "3003:3003"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+    env_file:
+      - ./services/reservation-service/.env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  # Serviço de Salas (Sala Service)
+  sala-service:
+    container_name: sala-service
+    build: ./services/sala-service  # Caminho para o diretório onde seu serviço sala-service está localizado
+    ports:
+      - "3004:3004"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres  # URL de conexão com o banco de dados
+    env_file:
+      - ./services/sala-service/.env
     depends_on:
       - db
     networks:
