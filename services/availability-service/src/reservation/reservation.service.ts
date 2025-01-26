@@ -1,48 +1,32 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Reservation } from './models/reservation.model';
-import { Room } from './models/room.model';
-import { Op } from 'sequelize';
 
 @Injectable()
 export class ReservationService {
-  constructor(
-    @InjectModel(Reservation)
-    private readonly reservationModel: typeof Reservation, 
-    @InjectModel(Room)
-    private readonly roomModel: typeof Room, 
-  ) {}
+  constructor() {}
 
   // Método para verificar se um turno está ocupado
-  async isAvailable(id: string, turno: 'manha' | 'tarde' | 'noite'): Promise<boolean> {
-    // Verifica se a sala existe
-    const sala = await this.roomModel.findOne({
-      where: {
-        id: id,
-      },
+  async isAvailable(id: Number, turno: 'manha' | 'tarde' | 'noite', data: string): Promise<boolean> {
+    // Chama o endpoint do serviço de reservas obtendo todas as reservas
+    const reservas = await fetch('http://reservation-service:3003/get');
+    const reservasJson = await reservas.json();
+    
+    // Filtra as reservas para obter as reservas da sala no turno e data especificados
+    const reservasDaSalaNoTurno = reservasJson.filter((reserva: ReservationType) => {
+      return Number(reserva.salaId) === Number(id) && String(reserva.turno) === String(turno)
+          && String(reserva.data) === String(data);
     });
 
-    if (!sala) {
-      throw new HttpException('Sala não existe.', HttpStatus.NOT_FOUND);
-    }
-
-    // Busca a reserva para a sala e turno específicos
-    const reservation = await this.reservationModel.findOne({
-      where: {
-        salaId: id,
-        turno: turno,
-        data: {
-          [Op.gte]: new Date(), // Verifica se a data da reserva é maior ou igual à data atual
-        },
-      },
-    });
-
-    // Se não há reservas com o respectivo id e turno, a sala está disponível
-    if (!reservation) {
-      return true;
-    }
-
-    // Se há uma reserva válida para o turno, o turno está ocupado
-    return false;
+    // Se não houver nenhuma reserva, a sala está disponível
+    return reservasDaSalaNoTurno.length === 0;
   }
 }
+
+type ReservationType = {
+  id: Number;
+  turno: 'manha' | 'tarde' | 'noite';
+  usuarioId: Number;
+  data: Date; // formato 'YYYY-MM-DD'
+  salaId: Number;
+  createdAt: Date; // formato 'YYYY-MM-DD HH:mm:ss'
+  updatedAt: Date; // formato 'YYYY-MM-DD HH:mm:ss'
+};

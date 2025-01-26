@@ -6,9 +6,6 @@ import { Reservation } from './models/reservation.model';
 import { Room } from './models/room.model';
 
 @Module({
-  imports: [
-    SequelizeModule.forFeature([Reservation, Room]), // Registrando o modelo 'Reservation' para uso no módulo
-  ],
   controllers: [ReservationController],
   providers: [ReservationService],
 })

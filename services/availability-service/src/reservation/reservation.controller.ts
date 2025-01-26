@@ -4,16 +4,17 @@ import { HttpException } from '@nestjs/common';
 
 @Controller('salas')
 export class ReservationController {
-    constructor(private readonly reservationService: ReservationService) { }
+    constructor(private readonly reservationService: ReservationService) {}
 
-    // Endpoint para verificar a disponibilidade de uma sala dado um turno
-    @Get(':id/disponibilidade/:turno')
+    // Endpoint para verificar a disponibilidade de uma sala dado um turno e data
+    @Get(':id/disponibilidade/:turno/:data')
     async checkAvailability(
-        @Param('id') id: string,
+        @Param('id') id: Number,
         @Param('turno') turno: 'manha' | 'tarde' | 'noite',
+        @Param('data') data: string,
     ): Promise<{ available: boolean }> {
         try {
-            const available = await this.reservationService.isAvailable(id, turno);
+            const available = await this.reservationService.isAvailable(id, turno, data);
             return { available };
         } catch (error){
             // Verifica se o erro veio do service
@@ -28,5 +29,4 @@ export class ReservationController {
             );
         }
     }
-
 }
