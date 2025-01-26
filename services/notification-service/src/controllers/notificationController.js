@@ -45,7 +45,7 @@ const sendEmail = async (email, reserva, assunto, sala) => {
     <p>A sua reserva foi <b>CONFIRMADA</b> com sucesso. Confira abaixo mais informações: </p>
     <ul>
     <li>Nome da sala: ${sala.nome}</li>
-    <li>Localização: ${sala.localizacao}</li>
+    <li>Localização: ${sala.localizacao}º andar</li>
     <li>Turno: ${reserva.turno}</li>
     <li>Data: ${reserva.data}</li>
     </ul>
@@ -64,7 +64,7 @@ const sendEmail = async (email, reserva, assunto, sala) => {
         ? `A sua reserva da sala "${sala.nome}" no dia ${reserva.data} (${reserva.turno}) foi CANCELADA com sucesso.`
         : `A sua reserva foi CONFIRMADA com sucesso. Confira abaixo mais informações:\n
         - Nome da sala: ${sala.nome}\n
-        - Localização: ${sala.localizacao}\n
+        - Localização: ${sala.localizacao}º andar\n
         - Turno: ${reserva.turno}\n
         - Data: ${reserva.data}`}`,    
       html: emailBody,
@@ -75,27 +75,32 @@ const sendEmail = async (email, reserva, assunto, sala) => {
 };
 
 const getData = async (user_id, reserva_id) => {
-  console.log("usuarioId: " + user_id)
-  console.log("reserva_id: " + reserva_id)
-  
-  const reservas = await fetch('http://reservation-service:3003/get');
-  const reservasJson = await reservas.json();
-  
-  const user = await fetch(`http://user-service:3002/users/${user_id}`);
-  const userJson = await user.json();
-  
-  const salas = await fetch('http://sala-service:3004/get');
-  const salasJson = await salas.json();
-  
-  const reserva = reservasJson.find((reservation) =>
-    reservation.usuarioId === Number(userJson.id) && reservation.id === Number(reserva_id)
-);
+  try {
 
-  console.log(reservasJson, userJson, salasJson, reserva);
-  if (!reserva) throw new Error("Reserva não encontrada.");
-  
-  const sala = salasJson.find((sala) => sala.id === Number(reserva_id));
-  if (!sala) throw new Error("Sala não encontrada.");
-  
-  return { email: userJson.email, reserva, sala };
+    // Requisições aos serviços
+    const reservas = await fetch(`${process.env.RESERVATION_SERVICE_URL}/get`);
+    const reservasJson = await reservas.json();
+
+    const user = await fetch(`${process.env.USER_SERVICE_URL}/users/${user_id}`);
+    const userJson = await user.json();
+
+    const salas = await fetch(`${process.env.SALA_SERVICE_URL}/get`);
+    const salasJson = await salas.json();
+
+    const reserva = reservasJson.find(
+      (reservation) =>
+        reservation.usuarioId === Number(userJson.id) &&
+        reservation.id === Number(reserva_id)
+    );
+
+    if (!reserva) throw new Error('Reserva não encontrada.');
+
+    const sala = salasJson.find((sala) => sala.id === Number(reserva.salaId));
+    if (!sala) throw new Error('Sala não encontrada.');
+
+    return { email: userJson.email, reserva, sala };
+  } catch (error) {
+    console.error('Erro ao obter dados:', error.message);
+    throw new Error(error.message);
+  }
 };

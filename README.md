@@ -97,15 +97,23 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
 
+# E-mail config
+EMAIL_USER=promonitorufrpe@gmail.com
+EMAIL_PASS=icwzxvtviaeuqema
+
 # Ports
 USER_SERVICE_PORT=3002
 SALA_SERVICE_PORT=3004
 RESERVATION_SERVICE_PORT=3003
+NOTIFICATION_SERVICE_PORT=3005
 
 # Services URLs
 USER_SERVICE_URL=http://user-service:3002
 SALA_SERVICE_URL=http://sala-service:3004
+NOTIFICATION_SERVICE_URL=http://notification-service:3005
+RESERVATION_SERVICE_URL =http://reservation-service:3003 
 AVAILABILITY_SERVICE_URL=http://availability-service:3006
+
 ```
 
 ## Rodando localmente
