@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const { compare } = require('bcryptjs');
 
 const createUser = async (req, reply) => {
     const { email, password, name, department } = req.body;
@@ -48,14 +49,20 @@ const getUserByEmail = async (req, reply) => {
 };
 
 const updateUser = async (req, reply) => {
-    const { id } = req.params;
-    const { name, department } = req.body;
+    const { name, email, department, password } = req.body;
+
+    const { id } = req.user;
+    if (!id) return reply.status(401).send({ error: 'Usuário não autorizado' });
     
     try {
         const user = await User.findByPk(id);
         if (!user) return reply.status(404).send({ error: 'Usuário não encontrado' });
 
+        const passwordMatch = await compare(password, user.password);
+        if (!passwordMatch) return reply.status(401).send({ error: 'Senha inválida' });
+
         user.name = name || user.name;
+        user.email = email || user.email;
         user.department = department || user.department;
 
         await user.save();
@@ -67,10 +74,16 @@ const updateUser = async (req, reply) => {
 }
 
 const deleteUser = async (req, reply) => {
-    const { id } = req.params;
+    const { id } = req.user;
+    if (!id) return reply.status(401).send({ error: 'Usuário não autorizado' });
+
     try {
         const user = await User.findByPk(id);
         if (!user) return reply.status(404).send({ error: 'Usuário não encontrado' });
+
+        const { password } = req.body;
+        const passwordMatch = await compare(password, user.password);
+        if (!passwordMatch) return reply.status(401).send({ error: 'Senha inválida' });
 
         await user.destroy();
         return reply.status(204).send({ message: 'Usuário deletado com sucesso' });
