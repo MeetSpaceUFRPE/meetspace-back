@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import sequelize from './src/config/dbConfig.js';
+import { sequelize } from './src/config/dbConfig.js';
 import calendarRoutes from './src/routes/calendarRoutes.js'
 
 dotenv.config();
@@ -24,7 +24,7 @@ sequelize.authenticate()
   });
 
 // Rotas
-app.use(calendarRoutes);
+app.use('/api/calendar', calendarRoutes);
 
 // Iniciar servidor
 app.listen(PORT, () => console.log(`Serviço de Calendário rodando na porta ${PORT}`));
