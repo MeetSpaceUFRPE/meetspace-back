@@ -1,5 +1,3 @@
-import Calendar from '../models/calendarModel.js';
-
 export const getDailySchedule = async (salaId, data) => {
   try {
     const schedule = await Calendar.findAll({
