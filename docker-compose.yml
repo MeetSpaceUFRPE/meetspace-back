@@ -106,6 +106,21 @@ services:
     networks:
       - mynetwork
 
+ # Serviço de calendário (calendar-service)
+  calendar-service:
+    container_name: calendar-service
+    build: ./services/calendar-service
+    ports:
+      - "3007:3007"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
 networks:
   mynetwork:
     driver: bridge
