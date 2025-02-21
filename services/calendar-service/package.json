@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Serviço de calendário dos agendamentos da sala",
   "main": "./index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "teste"
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "agendamento"
   ],
   "author": "Lucas Xavier",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/MeetSpaceUFRPE/meetspace-back/issues"
   },
