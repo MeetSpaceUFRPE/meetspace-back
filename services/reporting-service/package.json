@@ -1,0 +1,26 @@
+{
+  "name": "reporting-service",
+  "version": "1.0.0",
+  "description": "Serviço de relatórios que gera relatórios de uso das salas, como frequência de reservas e ocupação média.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "relatórios",
+    "frequência",
+    "salas",
+    "ocupação"
+  ],
+  "author": "Lucas Xavier",
+  "license": "MIT",
+  "homepage": "https://github.com/MeetSpaceUFRPE/meetspace-back#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "node-fetch": "^3.3.2"
+  }
+}
