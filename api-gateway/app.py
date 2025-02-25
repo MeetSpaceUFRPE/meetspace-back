@@ -12,6 +12,7 @@ RESERVATION_SERVICE_URL = 'http://reservation-service:3003'
 SALA_SERVICE_URL = 'http://sala-service:3004'
 NOTIFICATION_SERVICE_URL = 'http://notification-service:3005'
 AVAILABILITY_SERVICE_URL = 'http://availability-service:3006'
+CALENDAR_SERVICE_URL = 'http://calendar-service:3007'
 
 """
     Redireciona a requisição para o serviço de destino
@@ -63,6 +64,10 @@ def reservations_proxy(path):
 @app.route('/api/salas/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def salas_proxy(path):
     return proxy_request(SALA_SERVICE_URL, path)
+
+@app.route('/api/calendar/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def calendar_proxy(path):
+    return proxy_request(CALENDAR_SERVICE_URL, path)
 
 @app.route('/', methods=['GET'])
 def index():
