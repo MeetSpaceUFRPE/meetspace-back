@@ -4,7 +4,7 @@ const CALENDAR_SERVICE_URL = process.env.CALENDAR_SERVICE_URL || 'http://calenda
 
 export const getReservationFrequency = async (salaId, startDate, endDate) => {
   try {
-    const response = await fetch(`${CALENDAR_SERVICE_URL}/api/calendar/frequency/${salaId}/${startDate}/${endDate}`);
+    const response = await fetch(`${CALENDAR_SERVICE_URL}/frequency/${salaId}/${startDate}/${endDate}`);
     const data = await response.json();
     return data.frequency;
   } catch (error) {
@@ -14,7 +14,7 @@ export const getReservationFrequency = async (salaId, startDate, endDate) => {
 
 export const getAverageOccupancy = async (salaId, startDate, endDate) => {
   try {
-    const response = await fetch(`${CALENDAR_SERVICE_URL}/api/calendar/occupancy/${salaId}/${startDate}/${endDate}`);
+    const response = await fetch(`${CALENDAR_SERVICE_URL}/occupancy/${salaId}/${startDate}/${endDate}`);
     const data = await response.json();
     return data.averageOccupancy;
   } catch (error) {

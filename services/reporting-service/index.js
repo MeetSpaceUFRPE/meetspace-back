@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // Rotas
-app.use('/api/reports', reportRoutes);
+app.use(reportRoutes);
 
 // Iniciar servidor
 app.listen(PORT, () => console.log(`Serviço de Relatórios rodando na porta ${PORT}`));

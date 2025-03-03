@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // Rotas
-app.use('/api/calendar', calendarRoutes);
+app.use(calendarRoutes);
 
 // Iniciar servidor
 app.listen(PORT, () => console.log(`Serviço de Calendário rodando na porta ${PORT}`));
