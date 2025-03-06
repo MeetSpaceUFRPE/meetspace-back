@@ -1,0 +1,33 @@
+{
+  "name": "calendar-service",
+  "version": "1.0.0",
+  "description": "Serviço de calendário dos agendamentos da sala",
+  "main": "./index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MeetSpaceUFRPE/meetspace-back.git"
+  },
+  "keywords": [
+    "reservas",
+    "salas",
+    "calendário",
+    "agendamento"
+  ],
+  "author": "Lucas Xavier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MeetSpaceUFRPE/meetspace-back/issues"
+  },
+  "homepage": "https://github.com/MeetSpaceUFRPE/meetspace-back#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "node-fetch": "^3.3.2"
+  }
+}

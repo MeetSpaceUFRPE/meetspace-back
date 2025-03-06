@@ -24,6 +24,9 @@ services:
       - availability-service
       - notification-service
       - sala-service
+      - reservation-service
+      - calendar-service
+      - reporting-service
     networks:
       - mynetwork
 
@@ -99,6 +102,32 @@ services:
       - "3004:3004"
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres  # URL de conexão com o banco de dados
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+ # Serviço de calendário (calendar-service)
+  calendar-service:
+    container_name: calendar-service
+    build: ./services/calendar-service
+    ports:
+      - "3007:3007"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+# Serviço de relatórios (reporting-service)
+  reporting-service:
+    container_name: reporting-service
+    build: ./services/reporting-service
+    ports:
+      - "3008:3008"
     env_file:
       - ./.env
     depends_on:
