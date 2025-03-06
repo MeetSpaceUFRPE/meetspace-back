@@ -78,10 +78,6 @@ Funcionalidade: Exibir cronograma diário de uma sala.
 Gera relatórios de uso das salas, como frequência de reservas e ocupação média.
 Funcionalidade: Relatório mensal de uso de salas.
 
-9. Serviço de Logs e Monitoramento
-Registra todas as ações e eventos no sistema para auditoria e monitoramento.
-Gera logs de quem fez reservas ou cancelamentos.
-
 ## Variáveis de ambiente
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env na raiz do projeto:
@@ -121,13 +117,13 @@ AVAILABILITY_SERVICE_URL=http://availability-service:3006
 Clone o projeto
 
 ```bash
-  git clone https://github.com/brenno-araujo25/reserva-salas
+  git clone https://github.com/MeetSpaceUFRPE/meetspace-back
 ```
 
 Entre no diretório do projeto
 
 ```bash
-  cd reserva-salas
+  cd meetspace-back
 ```
 
 Inicie os contêineres
