@@ -44,39 +44,37 @@ O MeetSpace é um sistema distribuído de gestão de reservas de salas de reuni�
 
 ## Microserviços
 
-1. Serviço de Autenticação e Autorização
-Gerencia login, cadastro e controle de acesso.
-Autentica usuários antes de acessar os outros serviços.
+1. Serviço de Autenticação e Autorização (auth-service):
+Gerencia login, cadastro e controle de acesso (com geração de tokens JWT).
+Garante a autorização dos usuários para realizar ações protegidas.
 
-2. Serviço de Gerenciamento de Usuários
+2. Serviço de Gerenciamento de Usuários (user-service):
 Mantém informações dos usuários, como nome, e-mail e departamento.
-Permite a atualização do perfil.
+Permite a atualização dos perfis, consultas de usuários e deleção de perfil.
 
-3. Serviço de Gerenciamento de Salas
-Registra e mantém os dados das salas (nome, capacidade, localização, recursos como projetor).
+3. Serviço de Gerenciamento de Salas (sala-service):
+Registra e mantém os dados das salas (nome, capacidade, localização, recursos).
 Atualiza informações sobre novas salas ou manutenção.
-Funcionalidades: Listar salas disponíveis, criar e editar salas.
+Lista salas disponíveis, cria e edita salas.
 
-4. Serviço de Reservas
+4. Serviço de Reservas (reservation-service):
 Gerencia a lógica de criação, atualização e cancelamento de reservas.
-Verifica conflitos de horários e disponibilidade de salas.
-Funcionalidade: Criar reserva para uma sala específica.
+Verifica conflitos de horários e disponibilidade de salas (se comunicando com o serviço de disponibilidade).
+Cria reservas para uma sala específica, além de cancelar reservas.
 
-5. Serviço de disponibilidade
+5. Serviço de disponibilidade (availability-service):
 Fornece a lógica para verificar a disponibilidade de salas em um período específico. 
-Pode ser otimizado com cache para acelerar consultas frequentes.
-Funcionalidade: Verificar se uma sala está livre em determinado período.
 
-6. Serviço de Notificações
+6. Serviço de Notificações (notification-service):
 Envia notificações por e-mail sobre confirmações, alterações ou cancelamentos de reservas.
+É chamado pelo serviço de reservas para enviar emails.
 
-7. Serviço de Calendário
+7. Serviço de Calendário (calendar-service):
 Centraliza a visualização de todas as reservas por sala e usuário.
-Funcionalidade: Exibir cronograma diário de uma sala.
+Exibe cronograma diário de uma sala.
 
-8. Serviço de Relatórios
+8. Serviço de Relatórios (reporting-service):
 Gera relatórios de uso das salas, como frequência de reservas e ocupação média.
-Funcionalidade: Relatório mensal de uso de salas.
 
 ## Variáveis de ambiente
 
